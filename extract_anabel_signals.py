@@ -1,45 +1,44 @@
 import re
 
-def extract_free_signal_pro(msg):
+def extract_anabel_signals(msg):
     # Normalize message for easier parsing
     msg = msg.strip()
 
-    # Position type (Buy/Sell)
-    position_type_match = re.search(r"\b(Buy|Sell)\b", msg, re.IGNORECASE)
-    position_type = position_type_match.group(1).capitalize() if position_type_match else ""
+    # Define patterns for the input format
+    patterns = {
+        "trade_pair": r"#([A-Za-z]+)",  # Matches the trade pair after '#'
+        "position_type": r"\b(BUY|SELL)\b",  # Matches "BUY" or "SELL"
+        "open_price": r"(?:level|psychological level|pivot level|trading on)\s*[-:]?\s*([\d.]+)",  # Matches the key level (open price)
+        "tp": r"(Goal|Target)\s*[-:]\s*([\d.]+)",  # Matches the target price (TP)
+        "sl": r"My Stop Loss\s*[-:]\s*([\d.]+)"  # Matches the stop-loss value (optional)
+    }
 
-    # Trade pair: get word before or after Buy/Sell
-    trade_pair = ""
-    if position_type:
-        pattern_before = rf"([A-Za-z]+)\s+{position_type}"
-        pattern_after = rf"{position_type}\s+([A-Za-z]+)"
-        match_before = re.search(pattern_before, msg, re.IGNORECASE)
-        match_after = re.search(pattern_after, msg, re.IGNORECASE)
-        if match_before:
-            trade_pair = match_before.group(1).upper()
-        elif match_after:
-            trade_pair = match_after.group(1).upper()
+    # Extract trade pair
+    trade_pair_match = re.search(patterns["trade_pair"], msg, re.IGNORECASE)
+    trade_pair = trade_pair_match.group(1).upper() if trade_pair_match else ""
 
-    # Open price: range or single
-    open_price_match = re.search(r"@\s*([\d.]+)\s*-\s*([\d.]+)", msg)
-    if open_price_match:
-        open_price = [float(open_price_match.group(1)), float(open_price_match.group(2))]
-    else:
-        single_price_match = re.search(r"\b(?:at|@)\s*([\d.]+)", msg)
-        open_price = [float(single_price_match.group(1))] if single_price_match else []
+    # Extract position type
+    position_type_match = re.search(patterns["position_type"], msg, re.IGNORECASE)
+    position_type = position_type_match.group(1).upper() if position_type_match else ""
+    position_type = "LONG" if position_type == "BUY" else "SHORT" if position_type == "SELL" else ""
 
-    # SL
-    sl_match = re.search(r"\bSL\s*[-:]?\s*([\d.]+)", msg, re.IGNORECASE)
-    sl = float(sl_match.group(1)) if sl_match else 0.0
+    # Extract open price
+    open_price_match = re.search(patterns["open_price"], msg, re.IGNORECASE)
+    open_price = float(open_price_match.group(1)) if open_price_match and open_price_match.group(1).replace('.', '', 1).isdigit() else 0.0
 
-    # TP values
-    tp_matches = re.findall(r"\bTP\d*\s*[-:]?\s*([\d.]+)", msg, re.IGNORECASE)
-    tp = [float(val) for val in tp_matches]
+    # Extract TP
+    tp_match = re.search(patterns["tp"], msg, re.IGNORECASE)
+    tp = float(tp_match.group(2)) if tp_match and tp_match.group(2).replace('.', '', 1).isdigit() else 0.0
 
+    # Extract SL (optional)
+    sl_match = re.search(patterns["sl"], msg, re.IGNORECASE)
+    sl = float(sl_match.group(1)) if sl_match and sl_match.group(1).replace('.', '', 1).isdigit() else None
+
+    # Return the extracted values
     return {
         "trade_pair": trade_pair,
         "position_type": position_type,
         "open_price": open_price,
-        "sl": sl,
-        "tp": tp
+        "tp": tp,
+        "sl": sl
     }
