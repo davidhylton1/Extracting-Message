@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 from extract_free_signal_pro import extract_free_signal_pro
 from extract_anabel_signals import extract_anabel_signals
 from extract_gold_signals import extract_gold_signals
+from extract_top_trading_signals import extract_top_trading_signals
 
+import re
 app = Flask(__name__)
 
 @app.route('/extract_free_signal_pro', methods=['POST'])
@@ -75,6 +77,44 @@ TAKE PROFIT: 3,083.22
 
         # Call the function and get the result
         result = extract_gold_signals(msg)
+
+        # Return the result as JSON
+        return jsonify({"success": True, "data": result}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/extract_top_trading_signals', methods=['GET'])
+def top_trading_signals():
+    try:
+        # Get the message from the request
+        msg = """📈GBP-NZD Free Signal!
+
+⭕Buy!
+—
+#GBPNZD is trading in an
+Uptrend and the pair made
+A bullish breakout of the
+Key horizontal level of 2.2600
+Which is now a support then
+Made a retest and we are now
+Seeing a bullish rebound
+Already which reinforces our
+Bullish bias on the pair and
+Suggests that we enter
+A long trade with the
+Take Profit of 2.2715
+And the Stop Loss of 2.2568
+Buy!🔼
+—
+About Vip |WebSite |JoinVipNow
+➖➖➖➖➖➖➖➖➖➖
+🤩JOIN VIP SIGNALS NOW👇
+@toptradingsignalsfx
+"""
+        msg = re.sub(r"\bENTER\b", "", msg, flags=re.IGNORECASE)
+
+        # Call the function and get the result
+        result = extract_top_trading_signals(msg)
 
         # Return the result as JSON
         return jsonify({"success": True, "data": result}), 200
