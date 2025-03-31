@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from extract_free_signal_pro import extract_free_signal_pro
 from extract_anabel_signals import extract_anabel_signals
+from extract_gold_signals import extract_gold_signals
 
 app = Flask(__name__)
 
@@ -23,18 +24,18 @@ def free_signal_pro():
 def anabel_signals():
     try:
         # Get the message from the request
-        msg = """SPY Set To Grow! BUY!
+        msg = """GOLD On The Rise! BUY!
 
 👩‍💻My dear friends,
-SPY looks like it will make a good move, and here are the details:
-The market is trading on 555.80 pivot level.
+Please, find my technical outlook for GOLD below:
+The instrument tests an important psychological level 3120.98
 Bias - Bullish
-———————
-Goal - 569.99
-Recommended Stop Loss - 549.79
+——————-
+Target - 3135.5
+Recommended Stop Loss - 3113.1
 ————————
-💐#SPY 
-💹Time Frame : 12H (signal)
+💐#GOLD
+💹Time Frame : 30m (signal)
 ———————————
 WISH YOU ALL LUCK🍀
 
@@ -43,6 +44,37 @@ WISH YOU ALL LUCK🍀
 
         # Call the function and get the result
         result = extract_anabel_signals(msg)
+
+        # Return the result as JSON
+        return jsonify({"success": True, "data": result}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/extract_gold_signals', methods=['GET'])
+def gold_signals():
+    try:
+        # Get the message from the request
+        msg = """📊GOLD: Will Go Up! Buy!
+
+🆓SIGNAL DETAILS 
+——————
+ENTER: Long trade 
+CURRENT PRICE:  3,071.33
+STOP LOSS:    3,063.41
+TAKE PROFIT: 3,083.22
+——————
+🔔SUGGESTED RISK:
+1% of the account for each trade
+
+👑Wish you good luck in trading to you all!
+——————
+✈️ CONTACT TO JOIN GOLD SIGNALS VIP👉🏻 @goldvip_contact
+
+😍 OR JOIN VIP IN BOT👉🏻@GoldSignalsVipPaymentBot
+"""
+
+        # Call the function and get the result
+        result = extract_gold_signals(msg)
 
         # Return the result as JSON
         return jsonify({"success": True, "data": result}), 200
