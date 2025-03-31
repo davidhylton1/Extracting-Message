@@ -3,6 +3,7 @@ from extract_free_signal_pro import extract_free_signal_pro
 from extract_anabel_signals import extract_anabel_signals
 from extract_gold_signals import extract_gold_signals
 from extract_top_trading_signals import extract_top_trading_signals
+from extract_forex_gdp_signals import extract_forex_gdp_signals
 
 import re
 app = Flask(__name__)
@@ -121,5 +122,50 @@ About Vip |WebSite |JoinVipNow
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/extract_forex_gdp_signals', methods=['GET'])
+def forex_gdp_signals():
+    try:
+        # Get the message from the request
+        msg = """🔽Forex Signal
+
+Sell USDJPY at any price between 148.90 till 149.15
+
+📊 USDJPY Analysis - USDJPY is falling from a lower high area of the descending channel after breaking and retesting the minor ascending channel line
+
+Target 1: 148.42
+
+Target 2: 147.60
+
+Target 3: 146.80
+
+Target 4: 145.75
+
+Target 5: 144.25
+
+Stop Loss: 149.78
+
+Follow below signal rules
+
+📍 After T1 reach, close some trade. Don't place any new trades. Move SL to Entry.
+
+📍 If T1 is not hit Within 2 days (Signal day + Next Working Day AEDT time), If the trade is
+
+at Entry = Close Trade
+in Profit = Move SL to Entry
+in Loss = Move TP to Entry
+
+Take the 2-min quiz to handle signals better: https://www.forexgdp.com/follow/#quiz 
+
+New to Signals? Read the rules here: https://www.forexgdp.com/follow/
+"""
+        msg = re.sub(r"\bENTER\b", "", msg, flags=re.IGNORECASE)
+
+        # Call the function and get the result
+        result = extract_forex_gdp_signals(msg)
+
+        # Return the result as JSON
+        return jsonify({"success": True, "data": result}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 if __name__ == '__main__':
     app.run(debug=True)
