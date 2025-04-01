@@ -8,9 +8,9 @@ def extract_anabel_signals(msg):
     patterns = {
         "trade_pair": r"#([A-Za-z]+)",  # Matches the trade pair after '#'
         "position_type": r"\b(BUY|SELL)\b",  # Matches "BUY" or "SELL"
-        "open_price": r"(?:level|psychological level|pivot level|trading on)\s*[-:]?\s*([\d.]+)",  # Matches the key level (open price)
+        "open_price": r"(?:level|psychological level|pivot level|pivot point|trading on)\s*[-:]?\s*([\d.]+)",  # Matches the key level (open price)
         "tp": r"(Goal|Target)\s*[-:]\s*([\d.]+)",  # Matches the target price (TP)
-        "sl": r"My Stop Loss\s*[-:]\s*([\d.]+)"  # Matches the stop-loss value (optional)
+        "sl": r"Stop Loss\s*[-:]\s*([\d.]+)"  # Matches the stop-loss value (optional)
     }
 
     # Extract trade pair

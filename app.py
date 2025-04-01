@@ -5,6 +5,7 @@ from extract_gold_signals import extract_gold_signals
 from extract_top_trading_signals import extract_top_trading_signals
 from extract_forex_gdp_signals import extract_forex_gdp_signals
 from extract_fx_signals import extract_fx_signals
+from extract_signal_provider import extract_signal_provider
 
 import re
 app = Flask(__name__)
@@ -28,18 +29,17 @@ def free_signal_pro():
 def anabel_signals():
     try:
         # Get the message from the request
-        msg = """GOLD On The Rise! BUY!
+        msg = """GBPUSD Expected Growth! BUY!
 
-👩‍💻My dear friends,
-Please, find my technical outlook for GOLD below:
-The instrument tests an important psychological level 3120.98
+👩‍💻My dear followers,
+I analysed this chart on GBPUSD and concluded the following:
+The market is trading on 1.2904 pivot level.
 Bias - Bullish
-——————-
-Target - 3135.5
-Recommended Stop Loss - 3113.1
+
+Target - 1.2929
 ————————
-💐#GOLD
-💹Time Frame : 30m (signal)
+💐#GBPUSD 
+💹Time Frame :  1H (forecast)
 ———————————
 WISH YOU ALL LUCK🍀
 
@@ -207,6 +207,34 @@ https://www.tradingview.com/chart/NZDJPY/gbXLTrPq-NZDJPY-Long-Trade-Explained/
         return jsonify({"success": True, "data": result}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+    
+@app.route('/extract_signal_provider', methods=['GET'])
+def signal_provider():
+    try:
+        # Get the message from the request
+        msg = """🔅USOIL Is Bullish! Long!📈
+- - - - - - - - 
+Please, check our technical outlook for 📊USOIL.
+
+The market is approaching a key horizontal level 71.913.
+
+Considering the today's price action, probabilities will be high to see a movement to 73.911.
+- - - - - - - - 
+#freesignal #usoil
+- - - - - - - -
+🌐About VIP: signalprovider.org
+❓FAQ: signalprovider.org/faq
+📲: @signalprovidercontact
+"""
+        msg = re.sub(r"\bENTER\b", "", msg, flags=re.IGNORECASE)
+
+        # Call the function and get the result
+        result = extract_signal_provider(msg)
+
+        # Return the result as JSON
+        return jsonify({"success": True, "data": result}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500    
     
 if __name__ == '__main__':
     app.run(debug=True)
