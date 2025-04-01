@@ -4,6 +4,7 @@ from extract_anabel_signals import extract_anabel_signals
 from extract_gold_signals import extract_gold_signals
 from extract_top_trading_signals import extract_top_trading_signals
 from extract_forex_gdp_signals import extract_forex_gdp_signals
+from extract_fx_signals import extract_fx_signals
 
 import re
 app = Flask(__name__)
@@ -167,5 +168,45 @@ New to Signals? Read the rules here: https://www.forexgdp.com/follow/
         return jsonify({"success": True, "data": result}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+    
+@app.route('/extract_fx_signals', methods=['GET'])
+def fx_signals():
+    try:
+        # Get the message from the request
+        msg = """#NZDJPY: Long Trade Explained🔼
+
+⭐️NZDJPY
+- Classic bullish pattern
+- Our team expects retracement
+
+⭐️SUGGESTED TRADE:
+
+🔘
+Swing Trade
+🔴
+Buy NZDJPY
+🔘
+Entry - 84.764
+🟣
+Stop - 84.140
+🟡
+Take - 85.960
+🔘
+Our Risk - 1%
+
+📈
+ TradingView Link 
+https://www.tradingview.com/chart/NZDJPY/gbXLTrPq-NZDJPY-Long-Trade-Explained/
+"""
+        msg = re.sub(r"\bENTER\b", "", msg, flags=re.IGNORECASE)
+
+        # Call the function and get the result
+        result = extract_fx_signals(msg)
+
+        # Return the result as JSON
+        return jsonify({"success": True, "data": result}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
