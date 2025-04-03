@@ -39,7 +39,7 @@ def extract_anabel_signals(msg):
 
     # Extract SL (optional)
     sl_match = re.search(patterns["sl"], msg, re.IGNORECASE)
-    sl = float(sl_match.group(1)) if sl_match and sl_match.group(1).replace('.', '', 1).isdigit() else None
+    sl = float(sl_match.group(1)) if sl_match and sl_match.group(1).replace('.', '', 1).isdigit() else 0.5
 
     # Normalize trade pair and position type
     trade_pair = 'XAUUSD' if trade_pair.upper() == 'GOLD' else trade_pair.upper()

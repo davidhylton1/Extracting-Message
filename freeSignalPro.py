@@ -37,7 +37,7 @@ def extract_free_signal_pro(msg):
 
     # SL
     sl_match = re.search(r"\bSL\s*[-:]?\s*([\d.]+)", msg, re.IGNORECASE)
-    sl = float(sl_match.group(1)) if sl_match else 0.0
+    sl = float(sl_match.group(1)) if sl_match else 0.5
 
     # TP values
     tp_matches = re.findall(r"\bTP\d*\s*[-:]?\s*([\d.]+)", msg, re.IGNORECASE)
