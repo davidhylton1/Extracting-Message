@@ -1,6 +1,6 @@
 import re
 
-def is_new_postion_anabel_signals(message):
+def is_new_postion_top_trading_signals(message):
     if ('BUY!' in message.upper() or 'SELL!' in message.upper()):
         return True
     else:
@@ -150,4 +150,4 @@ About Vip |WebSite |JoinVipNow
 
 for msg in messages:
     print(extract_top_trading_signals(msg))
-    print(is_new_postion_anabel_signals(msg))
+    print(is_new_postion_top_trading_signals(msg))

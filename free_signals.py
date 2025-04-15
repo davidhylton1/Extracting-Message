@@ -15,8 +15,8 @@ def extract_signal_provider(msg):
     patterns = {
         "trade_pair": r"#([A-Za-z]+)",  # Matches all hashtags
         "position_type": r"\b(Long|Buy|Short|Sell)\b",  # Matches "Long", "Buy", "Short", or "Sell"
-        "open_price": r"(?:horizontal structure|resistance area|key support|support area|zone of supply|horizontal level|key resistance|of demand)\s*([\d.,]+)\b",  # Matches the key support or horizontal structure (open price)
-        "tp": r"(?:achieve|movement to|target|at least to|will reach|with goal|down to|aiming at)\s*([\d.,]+)\b",  # Matches the take-profit level
+        "open_price": r"(?:horizontal structure|resistance area|key support|support area|zone of supply|horizontal level|key resistance|testing a key resistance|of demand)\s*([\d.,]+)\b",  # Matches the key support or resistance (open price)
+        "tp": r"(?:achieve|movement to|target|at least to|will reach|with goal|down to|aiming at|to the downside at least to)\s*([\d.,]+)\b",  # Matches the take-profit level
         "sl": r"Stop Loss\s*[-:]\s*([\d.,]+)\b"  # Matches the stop-loss value (if provided)
     }
 
@@ -31,15 +31,15 @@ def extract_signal_provider(msg):
 
     # Extract open price
     open_price_match = re.search(patterns["open_price"], msg, re.IGNORECASE)
-    open_price = float(open_price_match.group(1).replace(",", "")) if open_price_match else 0.0
+    open_price = float(open_price_match.group(1).replace(",", "").strip(".")) if open_price_match else 0.0
 
     # Extract TP
     tp_match = re.search(patterns["tp"], msg, re.IGNORECASE)
-    tp = float(tp_match.group(1).replace(",", "")) if tp_match else 0.0
+    tp = float(tp_match.group(1).replace(",", "").strip(".")) if tp_match else 0.0
 
     # Extract SL
     sl_match = re.search(patterns["sl"], msg, re.IGNORECASE)
-    sl = float(sl_match.group(1).replace(",", "")) if sl_match else 0.5
+    sl = float(sl_match.group(1).replace(",", "").strip(".")) if sl_match else 0.5
 
     # Normalize trade pair and position type
     trade_pair = 'XAUUSD' if trade_pair.upper() == 'GOLD' else trade_pair.upper()
@@ -139,7 +139,20 @@ Considering the today's price action, probabilities will be high to see a moveme
 JOIN NOW via Bot: 
 @signalprovidervipbot
 CONTACT: 
-@signalprovidercontact"""
+@signalprovidercontact""",
+    """🔅EURUSD Will Go Lower From Resistance! Sell!**📉
+288|ts_sig | - - - - - - - -
+288|ts_sig | Please, check our technical outlook for📊EURUSD.
+288|ts_sig |
+288|ts_sig | __The price is testing a key resistance 1.130.__
+288|ts_sig |
+288|ts_sig | Taking into consideration the current market trend & overbought RSI, chances will be high to see a bearish movement to the downside at least to 1.114** level.
+288|ts_sig | - - - - - - - -
+288|ts_sig | #freesignal #eurusd
+288|ts_sig | - - - - - - - -
+288|ts_sig | 🌐About VIP: signalprovider.org
+288|ts_sig | ❓FAQ: signalprovider.org/faq
+288|ts_sig | 📲: @signalprovidercontact"""
 ]
 
 for msg in messages:
